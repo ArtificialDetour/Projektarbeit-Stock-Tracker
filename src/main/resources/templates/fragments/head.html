@@ -1,0 +1,157 @@
+<!-- App head fragment -->
+<th:block th:fragment="head(pageTitle)">
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <!-- CSRF metadata -->
+    <meta th:if="${_csrf != null}" th:content="${_csrf.token}" name="_csrf" />
+    <meta th:if="${_csrf != null}" th:content="${_csrf.headerName}" name="_csrf_header" />
+    <title th:text="${pageTitle != null ? pageTitle : 'App'} + ' | Aktien-Tracking'">Aktien-Tracking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-low": "#f2f4f6",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#173bab",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-primary-fixed": "#001453",
+                        "tertiary-fixed": "#6ffbbe",
+                        "inverse-primary": "#b8c4ff",
+                        "on-surface": "#191c1e",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-fixed": "#002113",
+                        "secondary": "#505f76",
+                        "on-secondary-fixed": "#0b1c30",
+                        "primary": "#000000",
+                        "on-primary-container": "#607cec",
+                        "outline-variant": "#c6c6cd",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#3755c3",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-dim": "#d8dadc",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "secondary-container": "#d0e1fb",
+                        "surface-container": "#eceef0",
+                        "tertiary": "#000000",
+                        "surface": "#f7f9fb",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "on-background": "#191c1e",
+                        "tertiary-container": "#002113",
+                        "surface-variant": "#e0e3e5",
+                        "on-tertiary-container": "#009668",
+                        "primary-fixed": "#dde1ff",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "secondary-fixed": "#d3e4fe",
+                        "primary-fixed-dim": "#b8c4ff",
+                        "surface-bright": "#f7f9fb",
+                        "background": "#f7f9fb",
+                        "primary-container": "#001453",
+                        "on-surface-variant": "#45464d",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#54647a",
+                        "outline": "#76777d"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <link th:href="@{/styles/shared.css}" rel="stylesheet" />
+</th:block>
+
+<!-- Auth head fragment -->
+<th:block th:fragment="auth-head(pageTitle)">
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title th:text="${pageTitle} + ' | Aktien-Tracking'">Aktien-Tracking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed": "#e3dbfd",
+                        "on-tertiary-fixed": "#3e3a54",
+                        "on-surface": "#113069",
+                        "inverse-primary": "#618bff",
+                        "error": "#9f403d",
+                        "on-tertiary": "#fcf7ff",
+                        "surface-container-high": "#e2e7ff",
+                        "tertiary-fixed-dim": "#d4cdee",
+                        "surface-variant": "#d9e2ff",
+                        "surface-container": "#eaedff",
+                        "error-container": "#fe8983",
+                        "outline": "#6079b7",
+                        "secondary-fixed-dim": "#c5d6f0",
+                        "on-tertiary-fixed-variant": "#5b5672",
+                        "tertiary-container": "#e3dbfd",
+                        "on-secondary-container": "#435368",
+                        "background": "#faf8ff",
+                        "surface-dim": "#cdd9ff",
+                        "tertiary": "#605c78",
+                        "secondary-fixed": "#d3e4fe",
+                        "primary-fixed-dim": "#c7d3ff",
+                        "on-secondary-fixed-variant": "#4d5d73",
+                        "on-primary": "#f8f7ff",
+                        "on-secondary-fixed": "#314055",
+                        "secondary-container": "#d3e4fe",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-container": "#0048bf",
+                        "on-tertiary-container": "#514d68",
+                        "secondary": "#506076",
+                        "primary": "#0053db",
+                        "primary-container": "#dbe1ff",
+                        "on-primary-fixed-variant": "#0050d4",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#959cb5",
+                        "on-error-container": "#752121",
+                        "on-primary-fixed": "#003798",
+                        "on-error": "#fff7f6",
+                        "outline-variant": "#98b1f2",
+                        "surface-container-low": "#f2f3ff",
+                        "surface-tint": "#0053db",
+                        "primary-dim": "#0048c1",
+                        "surface-container-highest": "#d9e2ff",
+                        "surface": "#faf8ff",
+                        "on-background": "#113069",
+                        "on-secondary": "#f7f9ff",
+                        "surface-bright": "#faf8ff",
+                        "inverse-surface": "#060e20"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</th:block>

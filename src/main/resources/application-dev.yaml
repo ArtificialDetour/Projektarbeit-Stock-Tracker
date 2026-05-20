@@ -1,0 +1,42 @@
+# Development profile settings.
+spring:
+  # Docker Compose is disabled for cloud database development.
+  docker:
+    compose:
+      enabled: false
+  # DEMO DB 
+  # https://neon.com/
+  # Neon development database.
+  # Note: Outside of a project, 
+  # sensitive information (username & password)
+  # should be stored securely.
+  datasource:
+    url: jdbc:postgresql://ep-noisy-thunder-alhe8xvg.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require
+    username: neondb_owner
+    password: npg_OknhzvR76FyY
+  # Development JPA settings.
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  # Template settings.
+  thymeleaf:
+    cache: false
+  # Static resource caching.
+  web:
+    resources:
+      cache:
+        period: 0
+        cachecontrol:
+          no-cache: true
+          must-revalidate: true
+
+# Logging levels.
+logging:
+  level:
+    root: INFO
+    com.project: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

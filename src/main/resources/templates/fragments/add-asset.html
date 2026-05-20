@@ -1,0 +1,84 @@
+<th:block th:fragment="addAssetModal">
+    <!-- Add asset modal -->
+    <div id="add-asset-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden" aria-modal="true"
+        role="dialog">
+        <div id="add-asset-backdrop" class="absolute inset-0 bg-black/50"></div>
+        <div
+            class="relative bg-surface-container-lowest rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <h2 class="font-manrope text-lg font-bold text-on-surface">Add Asset</h2>
+                <button id="add-asset-close" class="text-on-surface-variant hover:text-on-surface">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="relative">
+                <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">search</span>
+                <input id="add-asset-search" type="text" placeholder="Search symbol or company name…"
+                    class="w-full pl-9 pr-4 py-2.5 rounded-lg bg-surface-container text-on-surface text-sm border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary"
+                    autocomplete="off" />
+                <ul id="add-asset-results"
+                    class="absolute z-10 w-full mt-1 bg-surface-container-lowest border border-outline-variant rounded-lg shadow-lg max-h-48 overflow-y-auto hidden">
+                </ul>
+            </div>
+            <div id="add-asset-info" class="hidden flex flex-col gap-1 p-3 rounded-lg bg-surface-container">
+                <div class="flex items-center justify-between">
+                    <span id="add-asset-name" class="font-semibold text-on-surface text-sm"></span>
+                    <span id="add-asset-symbol-badge"
+                        class="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full"></span>
+                </div>
+                <div class="flex items-center gap-1 text-xs text-on-surface-variant">
+                    <span>Current price:</span>
+                    <span id="add-asset-price" class="font-semibold text-on-surface"></span>
+                    <span id="add-asset-currency" class="text-on-surface-variant"></span>
+                </div>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="add-asset-qty" class="text-xs font-semibold text-on-surface-variant">Quantity</label>
+                <input id="add-asset-qty" type="number" min="0.000001" step="any" placeholder="e.g. 5"
+                    class="w-full px-4 py-2.5 rounded-lg bg-surface-container text-on-surface text-sm border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+            <div class="flex items-center justify-between px-1 text-sm">
+                <span class="text-on-surface-variant">Estimated total</span>
+                <span id="add-asset-total" class="font-bold text-on-surface">—</span>
+            </div>
+            <div class="space-y-3 rounded-lg border border-outline-variant/30 bg-surface-container-low p-3">
+                <label class="flex items-center gap-2 text-sm font-semibold text-on-surface cursor-pointer">
+                    <input id="add-asset-edit-options" type="checkbox"
+                        class="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary" />
+                    <span>Edit Options</span>
+                </label>
+                <div id="add-asset-edit-fields" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="flex flex-col gap-1">
+                        <label for="add-asset-custom-price"
+                            class="text-xs font-semibold text-on-surface-variant">Purchase price</label>
+                        <input id="add-asset-custom-price" type="number" min="0.000001" step="any"
+                            placeholder="e.g. 123.45"
+                            class="w-full px-3 py-2 rounded-lg bg-surface-container text-on-surface text-sm border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary" />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="add-asset-custom-timestamp"
+                            class="text-xs font-semibold text-on-surface-variant">Purchase time</label>
+                        <input id="add-asset-custom-timestamp" type="datetime-local"
+                            class="w-full px-3 py-2 rounded-lg bg-surface-container text-on-surface text-sm border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary" />
+                    </div>
+                </div>
+            </div>
+            <div id="add-asset-error" class="hidden text-sm text-error bg-error/10 rounded-lg px-4 py-2"></div>
+            <button id="add-asset-confirm" disabled
+                class="w-full py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-on-primary-container to-primary-container text-white shadow-lg disabled:opacity-40 disabled:cursor-not-allowed transition-opacity">
+                Confirm Purchase
+            </button>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:fragment="addAssetScripts">
+    <!-- Add asset scripts -->
+    <script th:src="@{/scripts/add-asset/utils.js}"></script>
+    <script th:src="@{/scripts/add-asset/state.js}"></script>
+    <script th:src="@{/scripts/add-asset/api.js}"></script>
+    <script th:src="@{/scripts/add-asset/ui.js}"></script>
+    <script th:src="@{/scripts/add-asset/form.js}"></script>
+    <script th:src="@{/scripts/add-asset/init.js}"></script>
+</th:block>

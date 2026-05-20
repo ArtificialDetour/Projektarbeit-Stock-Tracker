@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="light" lang="en">
+
+<head>
+    <th:block th:replace="~{fragments/head :: head('Portfolio Analysis')}"></th:block>
+</head>
+
+<body class="bg-surface font-body text-on-surface flex min-h-screen">
+    <div class="layout-sidebar-slot">
+        <th:block th:replace="~{fragments/sidebar :: sidebar}"></th:block>
+    </div>
+    <main class="flex-1 flex flex-col min-w-0 overflow-x-hidden">
+        <div class="layout-topnav-slot">
+            <th:block th:replace="~{fragments/topnav :: topnav}"></th:block>
+        </div>
+        <!-- Portfolio content -->
+        <div class="page-container space-y-6 sm:space-y-8">
+            <!-- Portfolio header -->
+            <section class="flex flex-col md:flex-row justify-between md:items-end gap-6">
+                <div class="space-y-2">
+                    <h2 class="text-on-surface-variant font-label text-sm font-semibold tracking-widest uppercase">
+                        Portfolio Analysis</h2>
+                    <h1 id="portfolio-total-value"
+                        class="text-3xl sm:text-4xl font-black font-headline text-on-surface leading-tight">0€</h1>
+                    <div class="flex items-center gap-2">
+                        <span id="portfolio-total-return"
+                            class="bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full text-xs font-bold tracking-tight">0,00%
+                            Total Return</span>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <button id="portfolio-export-csv"
+                        class="px-6 py-3 rounded-lg font-bold text-sm bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-colors">Export
+                        CSV</button>
+                    <button data-add-asset
+                        class="px-6 py-3 bg-gradient-to-r from-on-primary-container to-primary-container text-white rounded-lg font-bold shadow-lg flex items-center justify-center transition-transform duration-150 active:scale-95">
+                        <span class="font-manrope text-sm">+ Add Asset</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Portfolio overview -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-8 bg-surface-container-lowest rounded-xl p-5 sm:p-8 relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-8">
+                        <div>
+                            <h3 class="text-lg font-bold font-headline">Portfolio Growth</h3>
+                        </div>
+                        <div class="hidden sm:flex gap-4">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-primary-container"></span>
+                                <span class="text-xs font-semibold text-on-surface-variant">Asset Value</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full" style="background:#4edea3"></span>
+                                <span class="text-xs font-semibold text-on-surface-variant">Inflation-Adj.</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full" style="background:#94a3b8"></span>
+                                <span class="text-xs font-semibold text-on-surface-variant">Inflation</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="pf-chart-wrap" class="chart-svg-wrap">
+                        <div id="pf-chart-y-axis-left"
+                            class="absolute left-0 sm:left-2 top-0 bottom-0 pointer-events-none w-24 z-10">
+                        </div>
+                        <svg id="pf-chart-svg" class="w-full h-full" viewBox="0 0 1000 300" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="pf-gradient-primary" x1="0%" x2="100%" y1="0%" y2="0%">
+                                    <stop offset="0%" stop-color="#607cec"></stop>
+                                    <stop offset="100%" stop-color="#001453"></stop>
+                                </linearGradient>
+                            </defs>
+                            <g id="pf-chart-grid-lines"></g>
+                            <line id="pf-chart-zero-line" stroke="currentColor" stroke-width="1.2"
+                                class="text-on-surface dark:text-slate-400" x1="0" x2="1000" y1="150" y2="150"></line>
+                            <path id="pf-chart-cumInfl-path" d="M0,150 L1000,150" fill="none" stroke="#94a3b8" stroke-dasharray="6 3" stroke-width="2"></path>
+                            <path id="pf-chart-inflation-path" d="M0,150 L1000,150" fill="none" stroke="#4edea3" stroke-dasharray="8 4" stroke-width="3"></path>
+                            <path id="pf-chart-asset-path" d="M0,150 L1000,150" fill="none" stroke="#607cec" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"></path>
+                        </svg>
+                    </div>
+                    <div class="flex justify-between mt-4 px-2">
+                        <span id="pf-chart-label-0" class="text-xs font-bold text-on-surface uppercase">-</span>
+                        <span id="pf-chart-label-1" class="text-xs font-bold text-on-surface uppercase">-</span>
+                        <span id="pf-chart-label-2" class="text-xs font-bold text-on-surface uppercase">-</span>
+                        <span id="pf-chart-label-3" class="text-xs font-bold text-on-surface uppercase">-</span>
+                        <span id="pf-chart-label-4" class="text-xs font-bold text-on-surface uppercase">-</span>
+                    </div>
+                </div>
+                <div class="lg:col-span-4 bg-surface-container-lowest rounded-xl p-5 sm:p-8 flex flex-col">
+                    <h3 class="text-xl font-bold font-headline mb-6">Asset Allocation</h3>
+                    <div class="flex-1 flex items-center justify-center relative py-4">
+                        <div class="relative w-48 h-48">
+                            <div id="alloc-donut" class="w-48 h-48 rounded-full"
+                                style="background: conic-gradient(#607cec 0deg 360deg);"></div>
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div
+                                    class="w-32 h-32 rounded-full bg-surface-container-lowest flex flex-col items-center justify-center text-center px-2">
+                                    <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">
+                                        Total</p>
+                                    <p id="alloc-center-total" class="text-lg font-black leading-tight">—</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 space-y-3">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full"
+                                    style="background:#607cec"></span>Stocks</span>
+                            <span id="alloc-stocks-pct" class="font-bold">—</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full"
+                                    style="background:#4edea3"></span>Crypto</span>
+                            <span id="alloc-crypto-pct" class="font-bold">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="space-y-6">
+                <div class="flex justify-between items-center gap-3 flex-wrap">
+                    <h3 id="portfolio-table-title" class="text-2xl font-black font-headline">Stock Details</h3>
+                    <div class="flex items-center gap-2">
+                        <div id="portfolio-filter-controls" class="flex gap-2">
+                            <button data-portfolio-filter="ALL"
+                                class="px-3 py-1 bg-surface-container-high rounded text-xs font-bold transition-colors">ALL</button>
+                            <button data-portfolio-filter="STOCKS"
+                                class="px-3 py-1 text-on-surface-variant rounded text-xs font-bold cursor-pointer hover:bg-surface-container transition-colors">STOCKS</button>
+                            <button data-portfolio-filter="CRYPTO"
+                                class="px-3 py-1 text-on-surface-variant rounded text-xs font-bold cursor-pointer hover:bg-surface-container transition-colors">CRYPTO</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-hidden rounded-xl bg-surface-container-lowest border-none">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-surface-container-low border-none">
+                                <th id="portfolio-col-primary" data-sort="name"
+                                    class="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-on-surface-variant cursor-pointer select-none hover:text-on-surface transition-colors">
+                                    Asset Name <span class="sort-arrow opacity-40">↕</span></th>
+                                <th id="portfolio-col-date"
+                                    class="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                                    First Purchase Date</th>
+                                <th id="portfolio-col-quantity"
+                                    class="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">
+                                    Quantity</th>
+                                <th id="portfolio-col-price"
+                                    class="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">
+                                    Avg. Stock Price</th>
+                                <th id="portfolio-col-buyin"
+                                    class="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">
+                                    Buy-In Amount</th>
+                                <th id="portfolio-col-value"
+                                    class="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">
+                                    Current Value</th>
+                                <th id="portfolio-col-performance" data-sort="perf"
+                                    class="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right cursor-pointer select-none hover:text-on-surface transition-colors">
+                                    Performance <span class="sort-arrow opacity-40">↕</span></th>
+                                <th id="portfolio-col-actions"
+                                    class="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="holdings-tbody" class="divide-y divide-surface-container">
+                            <tr id="holdings-empty">
+                                <td colspan="8" class="py-10 px-6 text-center text-sm text-on-surface-variant">No
+                                    holdings yet. Use "+ Add Asset" to get started.</td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="bg-surface-container-low border-t border-outline-variant/20">
+                            <tr>
+                                <td class="py-4 px-6 text-left">
+                                    <button id="portfolio-back-holdings"
+                                        class="hidden px-3 py-1 rounded-lg text-xs font-bold bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-colors">Back</button>
+                                </td>
+                                <td colspan="3" class="py-4 px-6 text-right text-sm font-bold text-on-surface-variant">
+                                    Total:</td>
+                                <td id="holdings-total-buyin"
+                                    class="py-4 px-6 text-right text-sm font-black text-on-surface">0,00 €</td>
+                                <td id="holdings-total-value"
+                                    class="py-4 px-6 text-right text-sm font-black text-on-surface">0,00 €</td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </section>
+            <div id="holding-history-overlay" class="hidden fixed inset-0 bg-slate-900/30 backdrop-blur-[2px] z-40">
+            </div>
+            <div id="holding-history-modal"
+                class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                <div
+                    class="w-full max-w-3xl bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-2xl overflow-hidden">
+                    <div
+                        class="px-6 py-5 border-b border-surface-container flex items-center justify-between bg-surface-bright/50">
+                        <div>
+                            <h4 id="holding-history-title" class="font-headline font-extrabold text-lg text-on-surface">
+                                Holding History</h4>
+                            <p id="holding-history-subtitle" class="text-xs text-on-surface-variant font-medium mt-0.5">
+                                Purchase timeline</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button id="holding-history-close" type="button"
+                                class="p-2 rounded-full hover:bg-surface-container-low transition-colors"
+                                aria-label="Close holding history">
+                                <span class="material-symbols-outlined text-on-surface-variant text-xl">close</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-6 py-5 max-h-[60vh] overflow-y-auto">
+                        <p class="text-sm text-on-surface-variant mb-4">Holdings: <span id="holding-history-count"
+                                class="font-black text-on-surface">0</span></p>
+                        <div
+                            class="overflow-hidden rounded-lg bg-surface-container-low border border-outline-variant/20">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-surface-container border-none">
+                                        <th
+                                            class="py-3 px-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                                            Date &amp; Time</th>
+                                        <th
+                                            class="py-3 px-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">
+                                            Quantity</th>
+                                        <th
+                                            class="py-3 px-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">
+                                            Price</th>
+                                        <th
+                                            class="py-3 px-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">
+                                            Total</th>
+                                        <th
+                                            class="py-3 px-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">
+                                            Performance</th>
+                                        <th
+                                            class="py-3 px-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">
+                                            Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="holding-history-body" class="divide-y divide-surface-container"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div id="card-best-performer"
+                    class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10 hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Best Performer
+                        </h4>
+                        <span class="material-symbols-outlined text-on-tertiary-container"
+                            data-icon="trending_up">trending_up</span>
+                    </div>
+                    <p id="best-name" class="text-sm font-semibold text-on-surface truncate mb-1"></p>
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <span id="best-pct"
+                            class="text-2xl font-extrabold font-manrope text-on-tertiary-container"></span>
+                        <span id="best-abs" class="text-sm font-medium text-on-surface-variant"></span>
+                    </div>
+                    <p class="text-xs text-on-surface-variant mt-2">Total return on this position.</p>
+                </div>
+                <div id="card-highlights"
+                    class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10 hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Highlights —
+                            last 7 days</h4>
+                        <span class="material-symbols-outlined text-secondary"
+                            data-icon="local_fire_department">local_fire_department</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-widest">Best
+                                </p>
+                                <p id="highlight-best-name" class="text-sm font-semibold text-on-surface"></p>
+                            </div>
+                            <span id="highlight-best-pct"
+                                class="text-sm font-extrabold text-on-tertiary-container"></span>
+                        </div>
+                        <div class="w-full h-px bg-outline-variant/20"></div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-widest">Worst
+                                </p>
+                                <p id="highlight-worst-name" class="text-sm font-semibold text-on-surface"></p>
+                            </div>
+                            <span id="highlight-worst-pct" class="text-sm font-extrabold text-error"></span>
+                        </div>
+                    </div>
+                </div>
+                <div id="card-worst-performer"
+                    class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10 hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Worst Performer
+                        </h4>
+                        <span class="material-symbols-outlined text-error"
+                            data-icon="trending_down">trending_down</span>
+                    </div>
+                    <p id="worst-name" class="text-sm font-semibold text-on-surface truncate mb-1"></p>
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <span id="worst-pct" class="text-2xl font-extrabold font-manrope text-error"></span>
+                        <span id="worst-abs" class="text-sm font-medium text-on-surface-variant"></span>
+                    </div>
+                    <p class="text-xs text-on-surface-variant mt-2">Total return on this position.</p>
+                </div>
+            </section>
+        </div>
+        <footer class="mt-auto p-8 text-center"></footer>
+        <th:block th:replace="~{fragments/add-asset :: addAssetModal}"></th:block>
+        <!-- Sell asset modal -->
+        <div id="sell-asset-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden" aria-modal="true"
+            role="dialog">
+            <div id="sell-asset-backdrop" class="absolute inset-0 bg-black/50"></div>
+            <div
+                class="relative bg-surface-container-lowest rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <h2 id="sell-asset-title" class="font-manrope text-lg font-bold text-on-surface">Sell Asset</h2>
+                    <button id="sell-asset-close" class="text-on-surface-variant hover:text-on-surface">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <div class="flex flex-col gap-1 p-3 rounded-lg bg-surface-container">
+                    <div class="flex items-center justify-between">
+                        <span id="sell-asset-name" class="font-semibold text-on-surface text-sm"></span>
+                        <span id="sell-asset-symbol-badge"
+                            class="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full"></span>
+                    </div>
+                    <div class="flex items-center gap-1 text-xs text-on-surface-variant mt-1">
+                        <span>Current price:</span>
+                        <span id="sell-asset-price" class="font-semibold text-on-surface ml-1"></span>
+                    </div>
+                    <div class="flex items-center gap-1 text-xs text-on-surface-variant">
+                        <span>You hold:</span>
+                        <span id="sell-asset-holding" class="font-semibold text-on-surface ml-1"></span>
+                    </div>
+                </div>
+                <div id="sell-asset-qty-wrapper" class="flex flex-col gap-1">
+                    <label for="sell-asset-qty" class="text-xs font-semibold text-on-surface-variant">Quantity to
+                        sell</label>
+                    <input id="sell-asset-qty" type="number" min="0.000001" step="any" placeholder="e.g. 5"
+                        class="w-full px-4 py-2.5 rounded-lg bg-surface-container text-on-surface text-sm border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary" />
+                </div>
+                <div class="flex items-center justify-between px-1 text-sm">
+                    <span class="text-on-surface-variant">Estimated proceeds</span>
+                    <span id="sell-asset-total" class="font-bold text-on-surface">—</span>
+                </div>
+                <div id="sell-asset-error" class="hidden text-sm text-error bg-error/10 rounded-lg px-4 py-2"></div>
+                <button id="sell-asset-confirm" disabled
+                    class="w-full py-3 rounded-xl font-bold text-sm bg-error text-white shadow-lg disabled:opacity-40 disabled:cursor-not-allowed transition-opacity">
+                    Confirm Sale
+                </button>
+            </div>
+        </div>
+    </main>
+    <th:block th:replace="~{fragments/scripts :: layoutScripts}"></th:block>
+    <script th:src="@{/scripts/portfolio/utils.js}"></script>
+    <script th:src="@{/scripts/portfolio/state.js}"></script>
+    <script th:src="@{/scripts/portfolio/allocation.js}"></script>
+    <script th:src="@{/scripts/portfolio/insights.js}"></script>
+    <script th:src="@{/scripts/portfolio/table.js}"></script>
+    <script th:src="@{/scripts/portfolio/filters.js}"></script>
+    <script th:src="@{/scripts/portfolio/sort.js}"></script>
+    <script th:src="@{/scripts/portfolio/history.js}"></script>
+    <script th:src="@{/scripts/portfolio/sell.js}"></script>
+    <script th:src="@{/scripts/portfolio/export.js}"></script>
+    <script th:src="@{/scripts/portfolio/data.js}"></script>
+    <script th:src="@{/scripts/portfolio/chart.js}"></script>
+    <script th:src="@{/scripts/portfolio/init.js}"></script>
+    <th:block th:replace="~{fragments/add-asset :: addAssetScripts}"></th:block>
+</body>
+
+</html>

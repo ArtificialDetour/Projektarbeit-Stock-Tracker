@@ -1,0 +1,21 @@
+# Production profile settings.
+spring:
+  # Database settings.
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  # Production JPA settings.
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  # Template settings.
+  thymeleaf:
+    cache: true
+
+# Logging levels.
+logging:
+  level:
+    root: WARN
+    com.project: INFO

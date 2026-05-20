@@ -1,0 +1,160 @@
+<!-- Top navigation fragment -->
+<header th:fragment="topnav"
+    class="fixed top-0 left-0 lg:left-64 right-0 flex justify-between items-center h-16 px-4 md:px-6 z-40 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none">
+    <!-- Main navigation bar -->
+    <div class="flex items-center flex-1">
+        <button class="mr-3 rounded-lg p-1.5 hover:bg-surface-container-high dark:hover:bg-slate-800 lg:hidden"
+            id="mobile-sidebar-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false">
+            <span class="material-symbols-outlined text-blue-900 dark:text-blue-400" data-icon="menu">menu</span>
+        </button>
+        <div class="relative w-full max-w-md">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-on-surface-variant">
+                <span class="material-symbols-outlined text-lg" data-icon="search">search</span>
+            </span>
+            <input
+                id="topnav-search"
+                class="w-full bg-surface-container-high/50 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary-container/20 placeholder:text-on-surface-variant font-body"
+                placeholder="Search transactions..." type="text" />
+        </div>
+    </div>
+    <div class="flex items-center gap-6 ml-4">
+        <button
+            class="opacity-80 active:opacity-100 transition-opacity rounded-lg p-1.5 hover:bg-surface-container-high dark:hover:bg-slate-800 relative"
+            id="notifications-trigger">
+            <span class="material-symbols-outlined text-blue-900 dark:text-blue-400"
+                data-icon="notifications">notifications</span>
+            <span id="notifications-badge" class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+        </button>
+        <button
+            class="opacity-80 active:opacity-100 transition-opacity rounded-lg p-1.5 hover:bg-surface-container-high dark:hover:bg-slate-800 relative"
+            id="activity-trigger" type="button" aria-label="Open activity log">
+            <span class="material-symbols-outlined text-blue-900 dark:text-blue-400" data-icon="history">history</span>
+        </button>
+        <button
+            class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high hover:ring-2 hover:ring-primary-container/20 transition-all"
+            id="profile-trigger" type="button" aria-label="Open profile menu">
+            <img class="w-full h-full object-cover" data-alt="User profile professional portrait"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaW991APvHoqPwdBoSLDJsbocoNCSLagVCe0VUNuqSzdz_rj_DumnAHASih38hjdL0ksYwGJ3FxGP1Dt2uKLnJx8fmjDPlVeUk8893hM7BX4mk7ut0m0Kil3QMlG0ukIBymko2V1aJtBE4xVnIn6OH-z18nZliROy8SzEJgBDHk4a_0GbkoPj1VQiftT1HnqZ4csVZapvLuGpGOk1h_-FAZf8pdLcr7gUepDRt5Ogm1SkXklY62988kGU3O96AtrGpB4H72gT1-aQ" />
+        </button>
+    </div>
+
+    <!-- Notification overlay -->
+    <div id="notifications-overlay" class="hidden absolute inset-0 bg-slate-900/5 backdrop-blur-[2px] z-40"></div>
+
+    <!-- Notification popover -->
+    <div id="notifications-popover"
+        class="hidden absolute right-4 md:right-8 top-16 z-50 w-[calc(100vw-2rem)] max-w-96 rounded-xl shadow-2xl shadow-slate-900/10 border ring-1 ring-slate-100 flex flex-col overflow-hidden animate-in fade-in slide-in-from-top-4 duration-300 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700">
+        <!-- Popover header -->
+        <div class="px-6 py-5 flex justify-between items-center border-b border-slate-100 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50">
+            <div>
+                <h2 class="font-headline font-extrabold text-slate-900 dark:text-slate-50 text-lg">Notifications</h2>
+                <p id="notifications-unread-count" class="text-xs text-on-surface-variant font-label"></p>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="notifications-clear-all" class="bg-surface-container-high dark:bg-slate-800 px-2.5 py-1.5 rounded-lg text-on-surface-variant dark:text-slate-400 text-[11px] font-bold font-label hover:bg-surface-container-highest dark:hover:bg-slate-700 transition-colors">Clear all</button>
+            </div>
+        </div>
+
+        <!-- Dynamic notification list -->
+        <div id="notifications-list" class="max-h-[70vh] overflow-y-auto no-scrollbar"></div>
+    </div>
+
+    <!-- Activity log popover -->
+    <div id="activity-overlay" class="hidden absolute inset-0 bg-slate-900/5 backdrop-blur-[2px] z-40"></div>
+
+    <div id="activity-popover"
+        class="hidden absolute right-4 md:right-20 top-16 z-50 w-[calc(100vw-2rem)] max-w-96 rounded-xl shadow-2xl shadow-slate-900/10 border ring-1 ring-slate-100 flex flex-col overflow-hidden animate-in bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700">
+        <!-- Popover header -->
+        <div class="px-6 py-5 flex justify-between items-center border-b border-slate-100 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50">
+            <div>
+                <h2 class="font-headline font-extrabold text-slate-900 dark:text-slate-50 text-lg">Activity Log</h2>
+            </div>
+            <div class="flex items-center gap-2">
+            </div>
+        </div>
+        <!-- Dynamic activity list -->
+        <div id="activity-list" class="max-h-[70vh] overflow-y-auto no-scrollbar py-2">
+            <p class="px-6 py-4 text-sm text-on-surface-variant">No recent activities.</p>
+        </div>
+    </div>
+
+    <!-- Profile overlay -->
+    <div id="profile-overlay" class="hidden fixed inset-0 bg-slate-900/5 backdrop-blur-[2px] z-40"></div>
+
+    <!-- Profile popover -->
+    <div id="profile-popover"
+        class="hidden fixed top-14 right-4 md:right-8 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div class="w-72 glass-effect shadow-[0_32px_64px_-12px_rgba(25,28,30,0.12)] rounded-xl ghost-border overflow-hidden ring-1 ring-black/5 dark:ring-white/10 bg-white dark:bg-slate-900">
+            <div class="p-5 flex flex-col items-center text-center space-y-3 border-b border-slate-100 dark:border-slate-800">
+                <div class="relative">
+                    <div class="w-16 h-16 rounded-full p-1 bg-gradient-to-tr from-on-primary-container to-primary-container">
+                        <img class="w-full h-full object-cover rounded-full border-2 border-white"
+                            data-alt="User profile professional portrait"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaW991APvHoqPwdBoSLDJsbocoNCSLagVCe0VUNuqSzdz_rj_DumnAHASih38hjdL0ksYwGJ3FxGP1Dt2uKLnJx8fmjDPlVeUk8893hM7BX4mk7ut0m0Kil3QMlG0ukIBymko2V1aJtBE4xVnIn6OH-z18nZliROy8SzEJgBDHk4a_0GbkoPj1VQiftT1HnqZ4csVZapvLuGpGOk1h_-FAZf8pdLcr7gUepDRt5Ogm1SkXklY62988kGU3O96AtrGpB4H72gT1-aQ" />
+                    </div>
+                    <div class="absolute bottom-0 right-0 w-4 h-4 bg-tertiary-fixed rounded-full border-2 border-white"></div>
+                </div>
+                <div class="space-y-0.5">
+                    <h2 class="font-headline font-bold text-lg tracking-tight text-on-surface dark:text-slate-50"
+                        data-profile-name th:text="${userName != null} ? ${userName} : 'Signed in User'">Signed in User</h2>
+                    <p class="font-label text-sm text-on-surface-variant dark:text-slate-400" data-profile-email
+                        th:text="${userEmail != null} ? ${userEmail} : 'user@example.com'">user@example.com</p>
+                </div>
+            </div>
+            <div class="py-2 bg-surface-container-low/50 dark:bg-slate-800/60">
+                <a class="flex items-center px-5 py-3 hover:bg-white/60 dark:hover:bg-slate-800/80 transition-colors group"
+                    th:href="@{/settings}">
+                    <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-container mr-3 text-[20px]">account_circle</span>
+                    <span class="font-label text-sm font-medium text-on-surface dark:text-slate-100">Account Settings</span>
+                </a>
+            </div>
+            <div class="p-3 bg-surface-container-low/30 dark:bg-slate-800/70 border-t border-outline-variant/10 dark:border-slate-700">
+                <button
+                    class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-white dark:bg-slate-900 border border-outline-variant/30 dark:border-slate-700 text-error font-headline font-bold text-sm shadow-sm hover:bg-error-container/10 transition-all active:scale-[0.98]"
+                    data-logout-button type="button">
+                    <span class="material-symbols-outlined text-[18px]">logout</span>
+                    Logout
+                </button>
+            </div>
+        </div>
+        <div class="absolute -top-2 right-6 w-4 h-4 bg-white/80 dark:bg-slate-900/80 rotate-45 backdrop-blur-xl border-t border-l border-outline-variant/15 dark:border-slate-700 z-[-1]"></div>
+    </div>
+
+    <!-- Popover styles -->
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+
+        .ghost-border {
+            border: 1px solid rgba(198, 198, 205, 0.15);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .animate-in {
+            animation: fadeInSlide 0.3s ease-out;
+        }
+
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</header>

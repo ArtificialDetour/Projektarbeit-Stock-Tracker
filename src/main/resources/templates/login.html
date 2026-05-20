@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="light" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Sign In | Aktien-Tracking</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "tertiary-fixed": "#e3dbfd",
+            "on-tertiary-fixed": "#3e3a54",
+            "on-surface": "#113069",
+            "inverse-primary": "#618bff",
+            "error": "#9f403d",
+            "on-tertiary": "#fcf7ff",
+            "surface-container-high": "#e2e7ff",
+            "tertiary-fixed-dim": "#d4cdee",
+            "surface-variant": "#d9e2ff",
+            "surface-container": "#eaedff",
+            "error-container": "#fe8983",
+            "outline": "#6079b7",
+            "secondary-fixed-dim": "#c5d6f0",
+            "on-tertiary-fixed-variant": "#5b5672",
+            "tertiary-container": "#e3dbfd",
+            "on-secondary-container": "#435368",
+            "background": "#faf8ff",
+            "surface-dim": "#cdd9ff",
+            "tertiary": "#605c78",
+            "secondary-fixed": "#d3e4fe",
+            "primary-fixed-dim": "#c7d3ff",
+            "on-secondary-fixed-variant": "#4d5d73",
+            "on-primary": "#f8f7ff",
+            "on-secondary-fixed": "#314055",
+            "secondary-container": "#d3e4fe",
+            "primary-fixed": "#dbe1ff",
+            "on-primary-container": "#0048bf",
+            "on-tertiary-container": "#514d68",
+            "secondary": "#506076",
+            "primary": "#0053db",
+            "primary-container": "#dbe1ff",
+            "on-primary-fixed-variant": "#0050d4",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-dim": "#54506b",
+            "inverse-on-surface": "#959cb5",
+            "secondary-dim": "#44546a",
+            "on-error-container": "#752121",
+            "on-primary-fixed": "#003798",
+            "on-error": "#fff7f6",
+            "outline-variant": "#98b1f2",
+            "surface-container-low": "#f2f3ff",
+            "error-dim": "#4e0309",
+            "surface-tint": "#0053db",
+            "primary-dim": "#0048c1",
+            "surface-container-highest": "#d9e2ff",
+            "surface": "#faf8ff",
+            "on-background": "#113069",
+            "on-secondary": "#f7f9ff",
+            "surface-bright": "#faf8ff",
+            "inverse-surface": "#060e20"
+          },
+          fontFamily: {
+            "headline": ["Manrope", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+            "label": ["Inter", "sans-serif"]
+          },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 font-body text-slate-900 min-h-screen flex flex-col">
+  <!-- Auth navigation -->
+  <nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200">
+    <div class="flex justify-center items-center gap-1 px-8 py-4 max-w-7xl mx-auto">
+      <div class="w-8 h-8 bg-on-primary-container rounded-lg flex items-center justify-center text-white">
+        <span class="material-symbols-outlined text-x2">analytics</span>
+      </div>
+      <div class="text-xl font-bold text-slate-900 dark:text-slate-50 font-headline">Aktien-Tracking</div>
+    </div>
+  </nav>
+
+  <!-- Auth content -->
+  <main class="flex-grow flex items-center justify-center px-6 pt-24 pb-12">
+    <div class="w-full max-w-[440px] z-10">
+      <div class="bg-white rounded-2xl p-10 md:p-12 shadow-sm border border-slate-200">
+        <!-- Auth header -->
+        <div class="flex flex-col items-center mb-8">
+          <div class="text-center">
+            <h1 class="font-headline text-3xl font-extrabold text-slate-900 tracking-tight mb-2">Welcome Back</h1>
+            <p class="font-body text-slate-500 text-sm">Enter your credentials to access your dashboard</p>
+          </div>
+        </div>
+
+        <!-- Server messages -->
+        <div th:if="${errorMessage}" class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          th:text="${errorMessage}"></div>
+        <div th:if="${successMessage}"
+          class="mb-5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700"
+          th:text="${successMessage}"></div>
+
+        <!-- Login form -->
+        <form id="login-form" method="post" th:action="@{/login}" class="space-y-5"
+          th:class="${showForgotPasswordForm} ? 'space-y-5 hidden' : 'space-y-5'">
+          <div class="space-y-1.5">
+            <label for="email" class="font-label text-[11px] font-bold text-slate-500 tracking-wider uppercase">Email
+              Address</label>
+            <input id="email" name="email" type="email" placeholder="name@company.com" required
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-on-primary-container/10 focus:border-on-primary-container focus:bg-white transition-all font-body text-sm outline-none">
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label for="password"
+                class="font-label text-[11px] font-bold text-slate-500 tracking-wider uppercase">Password</label>
+              <a id="btn-show-forgot" class="text-xs font-semibold text-primary hover:text-primary-dim transition-colors" href="#">Forgot
+                Password?</a>
+            </div>
+            <input id="password" name="password" type="password" placeholder="••••••••" required
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-on-primary-container/10 focus:border-on-primary-container focus:bg-white transition-all font-body text-sm outline-none">
+          </div>
+
+          <button type="submit"
+            class="w-full py-3 bg-gradient-to-r from-on-primary-container to-primary-container text-white rounded-lg font-bold shadow-lg flex items-center justify-center transition-transform duration-150 active:scale-95 hover:shadow-xl">
+            <span class="font-manrope text-sm">Sign In</span>
+          </button>
+        </form>
+
+        <!-- Password reset form -->
+        <form id="forgot-password-form" method="post" th:action="@{/forgot-password}" class="space-y-5 hidden"
+          th:class="${showForgotPasswordForm} ? 'space-y-5' : 'space-y-5 hidden'">
+
+
+          <div class="space-y-1.5">
+            <label for="forgot-email" class="font-label text-[11px] font-bold text-slate-500 tracking-wider uppercase">Email Address</label>
+            <input id="forgot-email" name="email" type="email" placeholder="name@company.com" required
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-on-primary-container/10 focus:border-on-primary-container focus:bg-white transition-all font-body text-sm outline-none">
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="securityCode" class="font-label text-[11px] font-bold text-slate-500 tracking-wider uppercase">Security Code</label>
+            <input id="securityCode" name="securityCode" type="text" maxlength="8" required autocomplete="one-time-code" placeholder="ABCD2345"
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-on-primary-container/10 focus:border-on-primary-container focus:bg-white transition-all font-body text-sm outline-none uppercase tracking-widest">
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="newPassword" class="font-label text-[11px] font-bold text-slate-500 tracking-wider uppercase">New Password</label>
+            <input id="newPassword" name="newPassword" type="password" placeholder="••••••••" required minlength="8"
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-on-primary-container/10 focus:border-on-primary-container focus:bg-white transition-all font-body text-sm outline-none">
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="confirmPassword" class="font-label text-[11px] font-bold text-slate-500 tracking-wider uppercase">Confirm New Password</label>
+            <input id="confirmPassword" name="confirmPassword" type="password" placeholder="••••••••" required minlength="8"
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-on-primary-container/10 focus:border-on-primary-container focus:bg-white transition-all font-body text-sm outline-none">
+          </div>
+
+          <button type="submit"
+            class="w-full py-3 bg-gradient-to-r from-on-primary-container to-primary-container text-white rounded-lg font-bold shadow-lg flex items-center justify-center transition-transform duration-150 active:scale-95 hover:shadow-xl">
+            <span class="font-manrope text-sm">Reset Password</span>
+          </button>
+          
+          <div class="text-center mt-4">
+             <a id="btn-show-login" class="text-xs font-semibold text-primary hover:text-primary-dim transition-colors" href="#">Back to Login</a>
+          </div>
+        </form>
+
+        <!-- Register link -->
+        <div class="mt-8 text-center">
+          <p class="text-sm font-body text-slate-500">
+            Don't have an account?
+            <a class="text-on-primary-container font-bold hover:underline ml-1" th:href="@{/register}">Create
+              Account</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="/scripts/forgot_password.js"></script>
+</body>
+
+</html>

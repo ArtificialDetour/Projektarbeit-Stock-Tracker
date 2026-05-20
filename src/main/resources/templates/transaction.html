@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <th:block th:replace="~{fragments/head :: head('Transactions')}"></th:block>
+</head>
+
+<body class="bg-surface font-body text-on-surface flex min-h-screen">
+    <div class="layout-sidebar-slot">
+        <th:block th:replace="~{fragments/sidebar :: sidebar}"></th:block>
+    </div>
+    <main class="flex-1 flex flex-col min-w-0 overflow-x-hidden">
+        <div class="layout-topnav-slot">
+            <th:block th:replace="~{fragments/topnav :: topnav}"></th:block>
+        </div>
+        <!-- Transactions content -->
+        <div class="page-container space-y-6 sm:space-y-8">
+            <!-- Transactions header -->
+            <section class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div class="space-y-1">
+                    <h2 class="text-3xl sm:text-4xl font-black font-headline leading-tight text-on-surface">Transactions</h2>
+                    <p class="text-on-surface-variant font-body">Historical audit of your equity and liquidity flow.</p>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <button id="tx-export-csv"
+                        class="px-6 py-3 rounded-lg font-bold text-sm bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-colors">Export CSV</button>
+                    <button data-add-asset
+                        class="px-6 py-3 bg-gradient-to-r from-on-primary-container to-primary-container text-white rounded-lg font-bold shadow-lg flex items-center justify-center transition-transform duration-150 active:scale-95">
+                        <span class="font-manrope text-sm">+ Add Asset</span>
+                    </button>
+                </div>
+            </section>
+            <!-- Transaction filters -->
+            <div class="bg-surface-container-low rounded-xl p-1.5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <nav class="flex p-1 bg-surface-container-high/50 rounded-lg overflow-x-auto whitespace-nowrap">
+                    <button data-tx-filter="ALL"
+                        class="px-6 py-2 bg-surface-container-lowest text-primary-container font-bold text-sm rounded-lg shadow-sm transition-colors">All Transactions</button>
+                    <button data-tx-filter="BUY"
+                        class="px-6 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-lg font-semibold text-sm transition-colors">Buy</button>
+                    <button data-tx-filter="SELL"
+                        class="px-6 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-lg font-semibold text-sm transition-colors">Sell</button>
+                </nav>
+                <div class="flex items-center space-x-2 px-2">
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg" data-icon="filter_list">filter_list</span>
+                        <select id="tx-date-filter"
+                            class="pl-10 pr-4 py-2 bg-surface-container text-on-surface border border-outline-variant/30 rounded-lg text-sm font-semibold focus:ring-0 cursor-pointer appearance-none">
+                            <option value="all">All Time</option>
+                            <option value="ytd">Year to Date</option>
+                            <option value="30d">Last 30 Days</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- Transactions table -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-surface-container-low">
+                            <tr>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant font-manrope">Date</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant font-manrope">Asset</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant font-manrope whitespace-nowrap">Type</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant font-manrope text-right">Quantity</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant font-manrope text-right">Stock Price</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant font-manrope text-right">Total Price</th>
+                                <th class="px-3 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant font-manrope text-right whitespace-nowrap">Profit/Loss</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant font-manrope text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-tbody" class="divide-y divide-surface-container">
+                            <tr id="tx-no-results">
+                                <td colspan="8" class="px-6 py-10 text-center text-sm text-on-surface-variant">No transactions found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-surface-container-low px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
+                    <span id="tx-count" class="text-xs text-on-surface-variant font-medium">0 transactions</span>
+                    <div class="flex items-center gap-3">
+                        <label class="flex items-center gap-2 text-xs text-on-surface-variant font-medium">
+                            Per page
+                            <select id="tx-page-size" class="bg-surface-container-high text-xs font-semibold rounded px-2 py-1 border-none focus:ring-0 cursor-pointer">
+                                <option value="25">25</option>
+                                <option value="50" selected>50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </label>
+                        <div id="tx-pagination" class="flex items-center space-x-1"></div>
+                    </div>
+                </div>
+            </div>
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-6 bg-surface-container rounded-xl border-l-4 border-on-primary-container">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-on-primary-container" data-icon="lightbulb">lightbulb</span>
+                        <h4 class="font-bold text-sm uppercase tracking-tighter">Tax Optimization</h4>
+                    </div>
+                    <p class="text-xs text-on-surface-variant leading-relaxed">Sometimes you can save a lot of money on taxes by selling your stocks at the right time, always check the tax system of your country.</p>
+                </div>
+                <div class="p-6 bg-surface-container rounded-xl border-l-4 border-tertiary-fixed-dim">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="auto_awesome">auto_awesome</span>
+                        <h4 class="font-bold text-sm uppercase tracking-tighter">Rebalance Signal</h4>
+                    </div>
+                    <p class="text-xs text-on-surface-variant leading-relaxed">Equity exposure can be adjusted to match your risk profile. Rebalancing your portfolio towards Fixed Income might maintain stability.</p>
+                </div>
+                <div class="p-6 bg-surface-container rounded-xl border-l-4 border-inverse-surface">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-on-surface" data-icon="verified">verified</span>
+                        <h4 class="font-bold text-sm uppercase tracking-tighter">Inflation Hedge</h4>
+                    </div>
+                    <p class="text-xs text-on-surface-variant leading-relaxed">A portfolio diversified across different asset classes can maintain purchasing power effectively through current cycles.</p>
+                </div>
+            </section>
+        </div>
+        <th:block th:replace="~{fragments/add-asset :: addAssetModal}"></th:block>
+    </main>
+    <th:block th:replace="~{fragments/scripts :: layoutScripts}"></th:block>
+    <script th:src="@{/scripts/transaction/utils.js}"></script>
+    <script th:src="@{/scripts/transaction/state.js}"></script>
+    <script th:src="@{/scripts/transaction/table.js}"></script>
+    <script th:src="@{/scripts/transaction/filters.js}"></script>
+    <script th:src="@{/scripts/transaction/pagination.js}"></script>
+    <script th:src="@{/scripts/transaction/export.js}"></script>
+    <script th:src="@{/scripts/transaction/data.js}"></script>
+    <script th:src="@{/scripts/transaction/init.js}"></script>
+    <th:block th:replace="~{fragments/add-asset :: addAssetScripts}"></th:block>
+</body>
+
+</html>

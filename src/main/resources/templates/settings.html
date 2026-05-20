@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="light" lang="en">
+
+<head>
+  <th:block th:replace="~{fragments/head :: head('Settings')}"></th:block>
+</head>
+
+<body class="bg-surface text-on-surface min-h-screen flex">
+  <div class="layout-sidebar-slot">
+    <th:block th:replace="~{fragments/sidebar :: sidebar}"></th:block>
+  </div>
+  <main class="flex-1 flex flex-col min-w-0">
+    <div class="layout-topnav-slot">
+      <th:block th:replace="~{fragments/topnav :: topnav}"></th:block>
+    </div>
+    <!-- Settings content -->
+    <section class="p-4 sm:p-6 lg:p-8 max-w-4xl w-full mx-auto space-y-6 sm:space-y-8">
+      <!-- Settings header -->
+      <div class="space-y-4">
+        <h2 class="text-4xl font-extrabold tracking-tight text-on-surface">Settings</h2>
+        <p class="text-on-surface-variant font-body max-w-2xl">Manage your profile and preferences.
+        </p>
+      </div>
+
+      <!-- Settings sections -->
+      <div class="space-y-8">
+        <!-- Account profile -->
+        <section class="bg-surface-container-lowest p-5 sm:p-8 rounded-xl shadow-sm border border-outline-variant/10">
+          <div class="flex justify-between items-center mb-8 border-b border-outline-variant/10 pb-4">
+            <h3 class="text-xl font-bold text-on-surface">Account Profile</h3>
+            <div class="flex items-center gap-2">
+              <button id="profile-edit-button"
+                class="text-sm font-bold text-on-primary-container hover:text-primary-container/80 transition-colors"
+                type="button">Change</button>
+              <button id="profile-save-button"
+                class="hidden text-sm font-bold text-on-primary-container hover:text-primary-container/80 transition-colors"
+                type="button">Save</button>
+              <button id="profile-cancel-button"
+                class="hidden text-sm font-bold text-on-error-container hover:text-error transition-colors"
+                type="button">Cancel</button>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-8">
+            <div class="relative">
+              <div class="w-24 h-24 rounded-full overflow-hidden shadow-sm border-2 border-outline-variant/10">
+                <img class="w-full h-full object-cover" alt="Profilbild"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaW991APvHoqPwdBoSLDJsbocoNCSLagVCe0VUNuqSzdz_rj_DumnAHASih38hjdL0ksYwGJ3FxGP1Dt2uKLnJx8fmjDPlVeUk8893hM7BX4mk7ut0m0Kil3QMlG0ukIBymko2V1aJtBE4xVnIn6OH-z18nZliROy8SzEJgBDHk4a_0GbkoPj1VQiftT1HnqZ4csVZapvLuGpGOk1h_-FAZf8pdLcr7gUepDRt5Ogm1SkXklY62988kGU3O96AtrGpB4H72gT1-aQ" />
+              </div>
+            </div>
+            <div class="flex-1 w-full space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Name</label>
+                  <p class="text-base font-semibold text-on-surface" data-auth-user-name>Loading...</p>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">E-Mail
+                    Address</label>
+                  <p class="text-base font-semibold text-on-surface" data-auth-user-email>Loading...</p>
+                </div>
+              </div>
+              <div id="profile-edit-fields" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider"
+                    for="profile-first-name">First
+                    Name</label>
+                  <input id="profile-first-name"
+                    class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-sm font-semibold text-on-surface focus:ring-1 focus:ring-primary-container"
+                    maxlength="100" type="text" />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider"
+                    for="profile-last-name">Last
+                    Name</label>
+                  <input id="profile-last-name"
+                    class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-sm font-semibold text-on-surface focus:ring-1 focus:ring-primary-container"
+                    maxlength="100" type="text" />
+                </div>
+              </div>
+              <p id="profile-update-message" class="hidden text-xs font-semibold"></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Preferences -->
+        <section class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10">
+          <h3 class="text-xl font-bold text-on-surface mb-6">Preferences</h3>
+          <div class="space-y-6">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between sm:items-center">
+              <div>
+                <p class="text-sm font-bold text-on-surface">Dark Mode</p>
+                <p class="text-xs text-on-surface-variant">Switch interface theme</p>
+              </div>
+              <button
+                class="w-10 h-5 bg-outline-variant rounded-full relative cursor-pointer flex items-center px-1 hover:bg-outline transition-colors"
+                data-toggle-dark-mode>
+                <div class="w-3 h-3 bg-white rounded-full shadow-sm transition-transform"></div>
+              </button>
+          </div>
+        </section>
+
+
+
+        <!-- Notifications -->
+        <section class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10">
+          <h3 class="text-xl font-bold text-on-surface mb-6 border-b border-outline-variant/10 pb-4">Notifications
+          </h3>
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-sm font-bold text-on-surface">Price Alerts</p>
+                <p class="text-xs text-on-surface-variant">Notifications for price changes</p>
+              </div>
+              <button class="w-10 h-5 bg-tertiary-fixed rounded-full relative cursor-pointer flex items-center px-1"
+                data-toggle-notifications>
+                <div class="w-3 h-3 bg-white rounded-full shadow-sm translate-x-5 transition-transform"></div>
+              </button>
+            </div>
+            <div class="border-t border-outline-variant/10"></div>
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-sm font-bold text-on-surface">Transaction Updates</p>
+                <p class="text-xs text-on-surface-variant">Notifications for portfolio transactions</p>
+              </div>
+              <button class="w-10 h-5 bg-tertiary-fixed rounded-full relative cursor-pointer flex items-center px-1"
+                data-toggle-transactions>
+                <div class="w-3 h-3 bg-white rounded-full shadow-sm translate-x-5 transition-transform"></div>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Data and privacy -->
+        <section class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10">
+          <h3 class="text-xl font-bold text-on-surface mb-6 border-b border-outline-variant/10 pb-4">Data &amp;
+            Privacy</h3>
+          <div class="space-y-3">
+            <button id="settings-export-data-button"
+              class="w-full text-left group flex items-center justify-between py-3 px-4 hover:bg-surface-container-low rounded-lg transition-colors">
+              <div class="flex items-center gap-4">
+                <span class="material-symbols-outlined text-on-primary-container" data-icon="download">download</span>
+                <div>
+                  <p class="text-sm font-bold text-on-surface">Export Data</p>
+                  <p class="text-xs text-on-surface-variant">Your portfolio and transaction history</p>
+                </div>
+              </div>
+              <span
+                class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform"
+                data-icon="chevron_right">chevron_right</span>
+            </button>
+            <div class="border-t border-outline-variant/10"></div>
+            <button id="settings-delete-account-button"
+              class="w-full text-left group flex items-center justify-between py-3 px-4 hover:bg-error-container/20 rounded-lg transition-colors">
+              <div class="flex items-center gap-4">
+                <span class="material-symbols-outlined text-error" data-icon="delete">delete</span>
+                <div>
+                  <p class="text-sm font-bold text-error">Delete Account</p>
+                  <p class="text-xs text-on-surface-variant">All data will be permanently deleted</p>
+                </div>
+              </div>
+              <span
+                class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform"
+                data-icon="chevron_right">chevron_right</span>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Settings footer -->
+      <footer
+        class="mt-12 pt-8 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-4 opacity-60">
+        <p class="text-xs font-medium">Version 1.0.0</p>
+        <p class="text-xs font-medium uppercase tracking-widest">© 2026 Aktien-Tracking</p>
+      </footer>
+    </section>
+  </main>
+  <!-- Delete account modal -->
+  <div id="delete-account-overlay" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity"></div>
+  <div id="delete-account-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md bg-surface-container-lowest rounded-xl shadow-lg z-50 p-6 border border-outline-variant/10">
+    <div class="flex items-center gap-3 mb-4 text-error">
+      <span class="material-symbols-outlined text-3xl">warning</span>
+      <h3 class="text-xl font-bold font-headline">Delete Account</h3>
+    </div>
+    <p class="text-sm text-on-surface-variant font-body mb-6 leading-relaxed">
+      Your account will be deleted within 2 hours. If you log in again during this time, the deletion process will be cancelled.
+    </p>
+    <div class="flex justify-end gap-3">
+      <button id="delete-account-cancel" class="px-4 py-2 text-sm font-bold text-on-surface hover:bg-surface-container-low rounded-lg transition-colors">
+        Cancel
+      </button>
+      <button id="delete-account-confirm" class="px-4 py-2 text-sm font-bold bg-error text-on-error hover:bg-error/90 rounded-lg transition-colors shadow-sm">
+        Confirm Deletion
+      </button>
+    </div>
+  </div>
+
+  <th:block th:replace="~{fragments/scripts :: layoutScripts}"></th:block>
+  <script th:src="@{/scripts/settings/toggles.js}"></script>
+  <script th:src="@{/scripts/settings/profile.js}"></script>
+  <script th:src="@{/scripts/settings/export.js}"></script>
+  <script th:src="@{/scripts/settings/delete-account.js}"></script>
+  <script th:src="@{/scripts/settings/init.js}"></script>
+</body>
+
+</html>

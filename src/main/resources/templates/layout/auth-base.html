@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title th:text="${pageTitle != null} ? ${pageTitle} + ' | Aktien-Tracking' : 'Aktien-Tracking'">Aktien-Tracking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed": "#e3dbfd",
+                        "on-tertiary-fixed": "#3e3a54",
+                        "on-surface": "#113069",
+                        "inverse-primary": "#618bff",
+                        "error": "#9f403d",
+                        "on-tertiary": "#fcf7ff",
+                        "surface-container-high": "#e2e7ff",
+                        "tertiary-fixed-dim": "#d4cdee",
+                        "surface-variant": "#d9e2ff",
+                        "surface-container": "#eaedff",
+                        "error-container": "#fe8983",
+                        "outline": "#6079b7",
+                        "secondary-fixed-dim": "#c5d6f0",
+                        "on-tertiary-fixed-variant": "#5b5672",
+                        "tertiary-container": "#e3dbfd",
+                        "on-secondary-container": "#435368",
+                        "background": "#faf8ff",
+                        "surface-dim": "#cdd9ff",
+                        "tertiary": "#605c78",
+                        "secondary-fixed": "#d3e4fe",
+                        "primary-fixed-dim": "#c7d3ff",
+                        "on-secondary-fixed-variant": "#4d5d73",
+                        "on-primary": "#f8f7ff",
+                        "on-secondary-fixed": "#314055",
+                        "secondary-container": "#d3e4fe",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-container": "#0048bf",
+                        "on-tertiary-container": "#514d68",
+                        "secondary": "#506076",
+                        "primary": "#0053db",
+                        "primary-container": "#dbe1ff",
+                        "on-primary-fixed-variant": "#0050d4",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#959cb5",
+                        "on-error-container": "#752121",
+                        "on-primary-fixed": "#003798",
+                        "on-error": "#fff7f6",
+                        "outline-variant": "#98b1f2",
+                        "surface-container-low": "#f2f3ff",
+                        "surface-tint": "#0053db",
+                        "primary-dim": "#0048c1",
+                        "surface-container-highest": "#d9e2ff",
+                        "surface": "#faf8ff",
+                        "on-background": "#113069",
+                        "on-secondary": "#f7f9ff",
+                        "surface-bright": "#faf8ff",
+                        "inverse-surface": "#060e20"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+    <th:block th:replace="${headContent} ?: ~{}"></th:block>
+</head>
+
+<body class="bg-slate-50 font-body text-slate-900 min-h-screen flex flex-col">
+    <!-- Auth navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200">
+        <div class="flex justify-center items-center gap-1 px-8 py-4 max-w-7xl mx-auto">
+            <div class="w-8 h-8 bg-on-primary-container rounded-lg flex items-center justify-center text-white">
+                <span class="material-symbols-outlined text-x2">analytics</span>
+            </div>
+            <div class="text-xl font-bold text-slate-900 dark:text-slate-50 font-headline">Aktien-Tracking</div>
+        </div>
+    </nav>
+
+    <!-- Auth content -->
+    <main class="flex-grow flex items-center justify-center px-6 pt-24 pb-12">
+        <th:block th:replace="${content}"></th:block>
+    </main>
+
+    <!-- Page scripts -->
+    <th:block th:replace="${scripts} ?: ~{}"></th:block>
+</body>
+
+</html>
