@@ -104,4 +104,5 @@ src/test/js                             JavaScript-Tests
 
 ## Autoren
 
-Bleron Beqiri & Dominik Peschke
+Bleron Beqiri 
+Dominik Peschke
