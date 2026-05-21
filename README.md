@@ -3,6 +3,10 @@
 Spring-Boot-Webapp fuer ein privates Aktien- und Krypto-Portfolio mit Login, Asset-Suche, Kauf/Verkauf, Holdings, Transaktionshistorie, Dashboard und Portfolio-Chart.
 
 
+## Navigation
+Im /attachements/ Ordner befinden sich App-Screenshots, Bilder der UML-Diagramme, die Ausarbeitung sowie die Präsentationen im PDF-Format. 
+
+
 
 ## Erster Start
 
@@ -104,6 +108,4 @@ src/test/js                             JavaScript-Tests
 
 ## Autoren
 
-Bleron Beqiri 
-
-Dominik Peschke
+Bleron Beqiri & Dominik Peschke
