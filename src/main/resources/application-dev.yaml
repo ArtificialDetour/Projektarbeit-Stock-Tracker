@@ -13,7 +13,7 @@ spring:
   datasource:
     url: jdbc:postgresql://ep-noisy-thunder-alhe8xvg.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require
     username: neondb_owner
-    password: npg_OknhzvR76FyY
+    password: #############################PLACEHOLDER_PUT_PASSWORD_HERE##############################
   # Development JPA settings.
   jpa:
     hibernate:
